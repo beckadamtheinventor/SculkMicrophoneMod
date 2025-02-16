@@ -8,7 +8,7 @@ version="${file.jarVersion}"
 displayName="§3Sculk §7Microphone"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/sculk-microphone"
 #credits="Towo"
-authors="Towo"
+authors="Towo, Beckadam"
 description='''
 This mod adds:
 - Vibration listener activation (Sensor, Warden) when talking into your microphone.
