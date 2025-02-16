@@ -44,6 +44,9 @@ public class MicrophoneHandler {
         stop();
         try {
             Mixer mixer = AudioManager.Input.get(SculkMicConfig.INPUT_DEVICE.get());
+            if (mixer == null) {
+                return false;
+            }
             microphone = new Microphone(mixer);
         } catch (LineUnavailableException e) {
             return false;

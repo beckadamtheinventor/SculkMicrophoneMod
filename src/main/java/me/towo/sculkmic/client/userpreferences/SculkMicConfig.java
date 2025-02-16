@@ -77,7 +77,10 @@ public final class SculkMicConfig {
     public static void setInputDevice(String deviceName) {
         if (!AudioManager.Input.exists(deviceName)) {
             SculkMicMod.LOGGER.warn("The input device " + deviceName + " doesn't exist! Settings it to default.");
-            setInputDevice(AudioManager.Input.defaultDeviceName());
+            String name = AudioManager.Input.defaultDeviceName();
+            if (name != null) {
+                setInputDevice(name);
+            }
         } else {
             INPUT_DEVICE.set(deviceName);
         }

@@ -12,9 +12,6 @@ public interface AudioManager {
         private static Mixer defaultDevice = null;
         public static Mixer[] getAllDevices() {
             ArrayList<Mixer> result = new ArrayList<>();
-            if (!tryInitDefaultDevice()) {
-                return result.toArray(new Mixer[0]);
-            }
             Mixer.Info[] infos = AudioSystem.getMixerInfo();
             for (Mixer.Info info : infos) {
                 Mixer mixer = AudioSystem.getMixer(info);
@@ -23,17 +20,10 @@ public interface AudioManager {
                     if(targetLineInfo instanceof DataLine.Info)
                         result.add(mixer);
             }
-            return result.toArray(new Mixer[0]);
-        }
-
-        public static boolean tryInitDefaultDevice() {
-            if (defaultDevice == null) {
-                Mixer[] mixers = getAllDevices();
-                if (mixers.length > 0) {
-                    defaultDevice = mixers[0];
-                }
+            if (defaultDevice == null && !result.isEmpty()) {
+                defaultDevice = result.get(0);
             }
-            return defaultDevice != null;
+            return result.toArray(new Mixer[0]);
         }
 
         public static List<String> getAllDeviceNames() {
@@ -45,7 +35,6 @@ public interface AudioManager {
         }
 
         public static Mixer get(String deviceName) {
-            tryInitDefaultDevice();
             Mixer[] mixers = getAllDevices();
             for (Mixer mixer : mixers) {
                 if (mixer.getMixerInfo().getName().equals(deviceName))
@@ -55,7 +44,6 @@ public interface AudioManager {
         }
 
         public static boolean exists(String deviceName) {
-            tryInitDefaultDevice();
             Mixer[] mixers = getAllDevices();
             for (Mixer mixer : mixers) {
                 if (mixer.getMixerInfo().getName().equals(deviceName))
@@ -65,11 +53,10 @@ public interface AudioManager {
         }
 
         public static String defaultDeviceName() {
-            tryInitDefaultDevice();
             if (defaultDevice != null) {
                 return defaultDevice.getMixerInfo().getName();
             }
-            return null;
+            return "?";
         }
     }
 }
